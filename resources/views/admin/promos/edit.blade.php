@@ -8,7 +8,7 @@
         <h3 class="card-title">Edit Promo: {{ $promo->title }}</h3>
     </div>
     <div class="card-body">
-        <form action="{{ route('promos.update', $promo->id) }}" method="POST">
+        <form action="{{ route('admin.promos.update', $promo->id) }}" method="POST">
             @csrf
             @method('PUT')
 
@@ -53,7 +53,7 @@
 
             <!-- Tombol -->
             <div class="d-flex justify-content-end">
-                <a href="{{ route('promos.index') }}" class="btn btn-light me-2">Batal</a>
+                <a href="{{ route('admin.promos.index') }}" class="btn btn-light me-2">Batal</a>
                 <button type="submit" class="btn btn-primary">Update Promo</button>
             </div>
         </form>

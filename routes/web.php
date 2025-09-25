@@ -54,9 +54,12 @@ Route::middleware('auth')->group(function () {
 // =======================
 // ADMIN
 // =======================
+
+
 Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/dashboard', fn () => view('admin.dashboard'))->name('admin.dashboard');
-
+    Route::get('/products', [ProductController::class, 'adminIndex'])->name('admin.products.index');
+Route::resource('products', ProductController::class)->except(['show','index']);
     // Orders
     Route::get('/orders', [OrderController::class, 'adminIndex'])->name('admin.orders.index');
     Route::get('/orders/{order}', [OrderController::class, 'adminShow'])->name('admin.orders.show');
@@ -73,7 +76,6 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
 
     // Lainnya
     Route::resource('categories', CategoryController::class);
-    Route::resource('promos', PromoController::class);
     Route::resource('users', UserController::class);
 
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
@@ -121,4 +123,20 @@ Route::middleware('auth')->group(function () {
     Route::post('/notifications/read-all', [NotificationController::class, 'readAll'])->name('notifications.readAll');
     Route::get('/notifications/read-and-go/{id}', [NotificationController::class, 'readAndGo'])
         ->name('notifications.readAndGo');
+});
+
+// PROMO untuk CUSTOMER
+Route::get('/promos', [PromoController::class, 'customerIndex'])
+    ->name('customer.promos.index');
+
+// PROMO untuk ADMIN
+Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
+    Route::resource('promos', PromoController::class)->except(['show'])->names([
+        'index'   => 'admin.promos.index',
+        'create'  => 'admin.promos.create',
+        'store'   => 'admin.promos.store',
+        'edit'    => 'admin.promos.edit',
+        'update'  => 'admin.promos.update',
+        'destroy' => 'admin.promos.destroy',
+    ]);
 });

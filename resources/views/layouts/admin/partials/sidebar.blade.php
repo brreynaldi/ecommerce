@@ -72,7 +72,7 @@
 
                 <div class="menu-item">
                     <a class="menu-link {{ request()->is('admin/promos*') ? 'active' : '' }}" 
-                       href="{{ route('promos.index') }}">
+                       href="{{ route('admin.promos.index') }}">
                         <span class="menu-icon"><i class="ki-outline ki-discount fs-2"></i></span>
                         <span class="menu-title">Promos</span>
                     </a>

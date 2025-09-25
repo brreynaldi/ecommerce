@@ -82,6 +82,21 @@
       bottom: 4px;
     }
 
+    .product-img-wrapper {
+  width: 100%;
+  aspect-ratio: 1/1; /* kotak */
+  overflow: hidden;
+  display: block;
+  background: #fff;
+}
+
+.product-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* isi penuh tanpa distorsi */
+  display: block;
+}
+
     /* Responsive rules */
     @media (min-width: 768px) {
       .bottom-nav { display: none; } /* hide di desktop */
@@ -93,147 +108,153 @@
   </style>
 </head>
 <body>
-  <!-- Navbar (Desktop/Tablet) -->
-  <nav class="navbar navbar-expand-lg bg-white sticky-top">
-    <div class="container">
-      <a class="navbar-brand" href="{{ route('home') }}">JasaKu</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+  {{-- Navbar tampil kalau bukan di login/register --}}
+  @if (!request()->routeIs('login') && !request()->routeIs('register'))
+    <nav class="navbar navbar-expand-lg bg-white sticky-top">
+      <div class="container">
+        <a class="navbar-brand" href="{{ route('home') }}">JasaKu</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu">
+          <span class="navbar-toggler-icon"></span>
+        </button>
 
-      <div class="collapse navbar-collapse" id="navbarMenu">
-        <!-- Search -->
-        <form class="d-flex ms-auto me-3 w-50" action="{{ route('products.index') }}" method="GET">
-          <input class="form-control me-2" type="search" name="q" placeholder="Cari produk...">
-          <button class="btn btn-outline-primary" type="submit"><i class="bi bi-search"></i></button>
-        </form>
+        <div class="collapse navbar-collapse" id="navbarMenu">
+          <!-- Search -->
+          <form class="d-flex ms-auto me-3 w-50" action="{{ route('products.index') }}" method="GET">
+            <input class="form-control me-2" type="search" name="q" placeholder="Cari produk...">
+            <button class="btn btn-outline-primary" type="submit"><i class="bi bi-search"></i></button>
+          </form>
 
-        <!-- Menu -->
-        <ul class="navbar-nav align-items-lg-center">
-          <li class="nav-item"><a class="nav-link" href="{{ route('home') }}">Beranda</a></li>
-          <li class="nav-item"><a class="nav-link" href="{{ route('products.index') }}">Produk</a></li>
-          <li class="nav-item"><a class="nav-link" href="{{ route('profile.show') }}">Profil</a></li>
+          <!-- Menu -->
+          <ul class="navbar-nav align-items-lg-center">
+            <li class="nav-item"><a class="nav-link" href="{{ route('home') }}">Beranda</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ route('products.index') }}">Produk</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ route('profile.show') }}">Profil</a></li>
 
-          <!-- Wishlist -->
-          <li class="nav-item position-relative">
-            <a class="nav-link" href="{{ route('wishlist.index') }}">
-              <i class="bi bi-heart-fill fs-5 text-danger"></i>
-              @if(session('wishlist_count',0) > 0)
-                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                  {{ session('wishlist_count') }}
-                </span>
-              @endif
-            </a>
-          </li>
+            <!-- Wishlist -->
+            <li class="nav-item position-relative">
+              <a class="nav-link" href="{{ route('wishlist.index') }}">
+                <i class="bi bi-heart-fill fs-5 text-danger"></i>
+                @if(session('wishlist_count',0) > 0)
+                  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    {{ session('wishlist_count') }}
+                  </span>
+                @endif
+              </a>
+            </li>
 
-          <!-- Notifikasi -->
-          <li class="nav-item dropdown position-relative">
-            <a class="nav-link dropdown-toggle" href="#" id="notifDropdown" role="button" data-bs-toggle="dropdown">
-              <i class="bi bi-bell-fill fs-5 text-warning"></i>
-              @if(Auth::check() && Auth::user()->unreadNotifications->count())
-                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                  {{ Auth::user()->unreadNotifications->count() }}
-                </span>
-              @endif
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="notifDropdown" style="min-width: 320px;">
-              @if(Auth::check() && Auth::user()->notifications->count())
-                @foreach(Auth::user()->notifications->take(5) as $notification)
+            <!-- Notifikasi -->
+            <li class="nav-item dropdown position-relative">
+              <a class="nav-link dropdown-toggle" href="#" id="notifDropdown" role="button" data-bs-toggle="dropdown">
+                <i class="bi bi-bell-fill fs-5 text-warning"></i>
+                @if(Auth::check() && Auth::user()->unreadNotifications->count())
+                  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    {{ Auth::user()->unreadNotifications->count() }}
+                  </span>
+                @endif
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="notifDropdown" style="min-width: 320px;">
+                @if(Auth::check() && Auth::user()->notifications->count())
+                  @foreach(Auth::user()->notifications->take(5) as $notification)
+                    <li>
+                      <a href="{{ route('notifications.readAndGo', $notification->id) }}" 
+                         class="dropdown-item d-flex flex-column small {{ $notification->read_at ? '' : 'fw-bold' }}">
+                        <span>{{ $notification->data['message'] ?? 'Notifikasi baru' }}</span>
+                        <span class="text-muted">{{ $notification->created_at->diffForHumans() }}</span>
+                      </a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                  @endforeach
                   <li>
-                    <a href="{{ route('notifications.readAndGo', $notification->id) }}" 
-                       class="dropdown-item d-flex flex-column small {{ $notification->read_at ? '' : 'fw-bold' }}">
-                      <span>{{ $notification->data['message'] ?? 'Notifikasi baru' }}</span>
-                      <span class="text-muted">{{ $notification->created_at->diffForHumans() }}</span>
+                    <a href="{{ route('notifications.index') }}" class="dropdown-item text-center text-primary">
+                      Lihat semua notifikasi
                     </a>
                   </li>
-                  <li><hr class="dropdown-divider"></li>
-                @endforeach
-                <li>
-                  <a href="{{ route('notifications.index') }}" class="dropdown-item text-center text-primary">
-                    Lihat semua notifikasi
-                  </a>
-                </li>
-              @else
-                <li><span class="dropdown-item text-muted">Belum ada notifikasi</span></li>
-              @endif
-            </ul>
-          </li>
-
-          <!-- Cart -->
-          <li class="nav-item position-relative">
-            <a class="nav-link" href="{{ route('cart.index') }}">
-              <i class="bi bi-cart-fill fs-5 text-primary"></i>
-              @if(session('cart_count',0) > 0)
-                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
-                  {{ session('cart_count') }}
-                </span>
-              @endif
-            </a>
-          </li>
-
-          <!-- User Account -->
-          @guest
-            <li class="nav-item"><a class="nav-link ms-lg-2" href="{{ route('login') }}">Login</a></li>
-            <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Register</a></li>
-          @else
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle ms-lg-2" href="#" role="button" data-bs-toggle="dropdown">
-                <i class="bi bi-person-circle me-1"></i>{{ Auth::user()->name }}
-              </a>
-              <ul class="dropdown-menu dropdown-menu-end">
-                @if(Auth::user()->role == 'admin')
-                  <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}">Dashboard Admin</a></li>
-                  <li><a class="dropdown-item" href="{{ route('reports.index') }}">Reports</a></li>
-                  <li><a class="dropdown-item" href="{{ route('settings.index') }}">Settings</a></li>
-                  <li><a class="dropdown-item" href="{{ route('users.index') }}">Users</a></li>
                 @else
-                  <li><a class="dropdown-item" href="{{ route('orders.index') }}">Pesanan Saya</a></li>
+                  <li><span class="dropdown-item text-muted">Belum ada notifikasi</span></li>
                 @endif
-                <li><hr class="dropdown-divider"></li>
-                <li>
-                  <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="dropdown-item">Logout</button>
-                  </form>
-                </li>
               </ul>
             </li>
-          @endguest
-        </ul>
+
+            <!-- Cart -->
+            <li class="nav-item position-relative">
+              <a class="nav-link" href="{{ route('cart.index') }}">
+                <i class="bi bi-cart-fill fs-5 text-primary"></i>
+                @if(session('cart_count',0) > 0)
+                  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
+                    {{ session('cart_count') }}
+                  </span>
+                @endif
+              </a>
+            </li>
+
+            <!-- User Account -->
+            @guest
+              <li class="nav-item"><a class="nav-link ms-lg-2" href="{{ route('login') }}">Login</a></li>
+              <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Register</a></li>
+            @else
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle ms-lg-2" href="#" role="button" data-bs-toggle="dropdown">
+                  <i class="bi bi-person-circle me-1"></i>{{ Auth::user()->name }}
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  @if(Auth::user()->role == 'admin')
+                    <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}">Dashboard Admin</a></li>
+                    <li><a class="dropdown-item" href="{{ route('reports.index') }}">Reports</a></li>
+                    <li><a class="dropdown-item" href="{{ route('settings.index') }}">Settings</a></li>
+                    <li><a class="dropdown-item" href="{{ route('users.index') }}">Users</a></li>
+                  @else
+                    <li><a class="dropdown-item" href="{{ route('orders.index') }}">Pesanan Saya</a></li>
+                  @endif
+                  <li><hr class="dropdown-divider"></li>
+                  <li>
+                    <form method="POST" action="{{ route('logout') }}">
+                      @csrf
+                      <button type="submit" class="dropdown-item">Logout</button>
+                    </form>
+                  </li>
+                </ul>
+              </li>
+            @endguest
+          </ul>
+        </div>
       </div>
-    </div>
-  </nav>
+    </nav>
+  @endif
 
   <!-- Main Content -->
   <main class="py-5">
     @yield('content')
   </main>
 
-  <!-- Bottom Navigation (Mobile Only) -->
-  <div class="bottom-nav d-flex d-md-none">
-    <a href="{{ route('home') }}" class="{{ request()->is('/') ? 'active' : '' }}">
-      <i class="bi bi-house-door-fill"></i><span>Home</span>
-    </a>
-    <a href="{{ route('cart.index') }}" class="{{ request()->is('cart*') ? 'active' : '' }}">
-      <i class="bi bi-cart-fill"></i><span>Cart</span>
-    </a>
-    <a href="{{ route('wishlist.index') }}" class="{{ request()->is('wishlist*') ? 'active' : '' }}">
-      <i class="bi bi-heart-fill"></i><span>Wishlist</span>
-    </a>
-    <a href="{{ route('notifications.index') }}" class="{{ request()->is('notifications*') ? 'active' : '' }}">
-      <i class="bi bi-bell-fill"></i><span>Notif</span>
-    </a>
-    <a href="{{ route('profile.show') }}" class="{{ request()->is('profile*') ? 'active' : '' }}">
-      <i class="bi bi-person-circle"></i><span>Saya</span>
-    </a>
-  </div>
-
-  <!-- Footer -->
-  <footer class="footer-elegant text-light text-center">
-    <div class="container">
-      <p>&copy; 2025 <span class="fw-bold text-gold">JasaKu</span>. All rights reserved.</p>
+  {{-- Bottom nav tampil kalau bukan login/register --}}
+  @if (!request()->routeIs('login') && !request()->routeIs('register'))
+    <div class="bottom-nav d-flex d-md-none">
+      <a href="{{ route('home') }}" class="{{ request()->is('/') ? 'active' : '' }}">
+        <i class="bi bi-house-door-fill"></i><span>Home</span>
+      </a>
+      <a href="{{ route('cart.index') }}" class="{{ request()->is('cart*') ? 'active' : '' }}">
+        <i class="bi bi-cart-fill"></i><span>Cart</span>
+      </a>
+      <a href="{{ route('wishlist.index') }}" class="{{ request()->is('wishlist*') ? 'active' : '' }}">
+        <i class="bi bi-heart-fill"></i><span>Wishlist</span>
+      </a>
+      <a href="{{ route('notifications.index') }}" class="{{ request()->is('notifications*') ? 'active' : '' }}">
+        <i class="bi bi-bell-fill"></i><span>Notif</span>
+      </a>
+      <a href="{{ route('profile.show') }}" class="{{ request()->is('profile*') ? 'active' : '' }}">
+        <i class="bi bi-person-circle"></i><span>Saya</span>
+      </a>
     </div>
-  </footer>
+  @endif
+
+  {{-- Footer tampil kalau bukan login/register --}}
+  @if (!request()->routeIs('login') && !request()->routeIs('register'))
+    <footer class="footer-elegant text-light text-center">
+      <div class="container">
+        <p>&copy; 2025 <span class="fw-bold text-gold">JasaKu</span>. All rights reserved.</p>
+      </div>
+    </footer>
+  @endif
 
   <!-- Script -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
