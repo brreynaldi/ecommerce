@@ -49,7 +49,10 @@
         
         <!-- Gambar Produk -->
         <a href="{{ route('products.show', $product->id) }}" class="product-img-wrapper">
-          <img src="{{ asset('storage/' . $product->image) }}" class="product-img" alt="{{ $product->name }}">
+          <img 
+          src="{{ $product->image ? asset('storage/' . $product->image) : url('https://picsum.photos/1600/600?random=1') }}" 
+          class="product-img" 
+          alt="{{ $product->name }}">
         </a>
 
         <!-- Tombol Wishlist -->
@@ -112,7 +115,10 @@
 
           <!-- Gambar Produk -->
           <a href="{{ route('products.show', $promo->id) }}" class="product-img-wrapper">
-            <img src="{{ asset('storage/' . $promo->image) }}" class="product-img" alt="{{ $promo->name }}">
+            <img 
+            src="{{ $promo->image ? asset('storage/' . $promo->image) : url('https://picsum.photos/1600/600?random=1') }}" 
+            class="product-img" 
+            alt="{{ $promo->name }}">
           </a>
 
           <!-- Tombol Wishlist -->
