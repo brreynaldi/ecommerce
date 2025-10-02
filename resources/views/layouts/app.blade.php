@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>@yield('title', 'JasaKu')</title>
+  <title>@yield('title', 'Linea Bridal')</title>
 
   <!-- Bootstrap & Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -112,7 +112,7 @@
   @if (!request()->routeIs('login') && !request()->routeIs('register'))
     <nav class="navbar navbar-expand-lg bg-white sticky-top">
       <div class="container">
-        <a class="navbar-brand" href="{{ route('home') }}">JasaKu</a>
+        <a class="navbar-brand" href="{{ route('home') }}"><img alt="Logo" src="{{ asset('assets/media/logos/no-background.png') }}" class="h-35px logo" width="130"/></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -251,7 +251,7 @@
   @if (!request()->routeIs('login') && !request()->routeIs('register'))
     <footer class="footer-elegant text-light text-center">
       <div class="container">
-        <p>&copy; 2025 <span class="fw-bold text-gold">JasaKu</span>. All rights reserved.</p>
+        <p>&copy; 2025 <span class="fw-bold text-gold">Linea Bridal</span>. All rights reserved.</p>
       </div>
     </footer>
   @endif

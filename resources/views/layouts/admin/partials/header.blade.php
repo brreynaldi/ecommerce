@@ -14,7 +14,7 @@
         <!--begin::Page Title-->
         <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
             <h1 class="d-flex align-items-center text-dark fw-bold fs-3 my-0">
-                @yield('page-title', 'E-COMMERECE')
+                @yield('page-title', 'LINEA BRIDAL  ')
             </h1>
         </div>
         <!--end::Page Title-->
@@ -32,28 +32,35 @@
 
             <!--begin::Notifications-->
             <div class="d-flex align-items-center ms-1 ms-lg-3">
-                <div class="btn btn-icon btn-active-light-primary w-30px h-30px position-relative" id="kt_activities_toggle">
+                <a href="{{ route('admin.notifications.index') }}" 
+                class="btn btn-icon btn-active-light-primary w-30px h-30px position-relative">
                     <i class="ki-outline ki-notification-status fs-2"></i>
-                    <span class="bullet bullet-dot bg-danger position-absolute top-0 start-50 translate-middle"></span>
-                </div>
+                    @if(auth()->user()?->unreadNotifications->count())
+                        <span class="bullet bullet-dot bg-danger position-absolute top-0 start-50 translate-middle"></span>
+                    @endif
+                </a>
             </div>
+
             <!--end::Notifications-->
 
             <!--begin::User Menu-->
             <div class="d-flex align-items-center ms-1 ms-lg-3" id="kt_header_user_menu_toggle">
-                <div class="cursor-pointer symbol symbol-30px symbol-md-40px" data-kt-menu-trigger="click" data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
-                    <img src="{{ asset('assets/media/avatars/300-1.jpg') }}" alt="user"/>
+                <div class="cursor-pointer symbol symbol-50px symbol-md-50px d-flex align-items-center justify-content-center fw-bold text-black "
+                    data-kt-menu-trigger="click" data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
+                    {{ Auth::user()->name }}
                 </div>
                 <!--begin::User Account Menu-->
-                <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-primary fw-semibold py-4 fs-6 w-275px" data-kt-menu="true">
+                <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-primary fw-semibold py-4 fs-6 w-275px"
+                    data-kt-menu="true">
                     <div class="menu-item px-3">
                         <div class="menu-content d-flex align-items-center px-3">
-                            <div class="symbol symbol-50px me-5">
-                                <img alt="Logo" src="{{ asset('assets/media/avatars/300-1.jpg') }}" />
-                            </div>
                             <div class="d-flex flex-column">
-                                <div class="fw-bold d-flex align-items-center fs-5">{{ Auth::user()->name ?? 'Admin' }}</div>
-                                <a href="#" class="fw-semibold text-muted text-hover-primary fs-7">{{ Auth::user()->email ?? '' }}</a>
+                                <div class="fw-bold d-flex align-items-center fs-5">
+                                    {{ Auth::user()->name ?? 'Admin' }}
+                                </div>
+                                <a href="#" class="fw-semibold text-muted text-hover-primary fs-7">
+                                    {{ Auth::user()->email ?? '' }}
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -74,6 +81,7 @@
                 </div>
                 <!--end::User Account Menu-->
             </div>
+
             <!--end::User Menu-->
 
         </div>

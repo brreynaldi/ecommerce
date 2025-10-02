@@ -28,6 +28,18 @@
         .aside.aside-dark[data-kt-drawer="false"][data-kt-drawer-state="off"] {
             transform: translateX(-100%) !important;
         }
+        .logo-box {
+                background: #fff;                   /* background putih */
+                padding: 10px;                      /* kasih ruang di sekitar logo */
+                border-radius: 8px;                 /* opsional: sudut sedikit melengkung */
+                box-shadow: 0 4px 10px rgba(0,0,0,0.1); /* shadow halus biar floating */
+                display: inline-block;
+            }
+            .logo-box img {
+                display: block;
+                max-width: 100%;
+                height: auto;
+            }
         .menu-link {
             color: #cfd2da;
             transition: all 0.2s;

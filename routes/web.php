@@ -88,7 +88,10 @@ Route::resource('products', ProductController::class)->except(['show','index']);
         ->name('admin.notifications.read');
     Route::post('/notifications/read-all', [App\Http\Controllers\Admin\NotificationController::class, 'readAll'])
         ->name('admin.notifications.readAll');
+        Route::get('/notifications/read-and-go/{id}', [App\Http\Controllers\Admin\NotificationController::class, 'readAndGo'])
+        ->name('admin.notifications.readAndGo');
 });
+
 
 // =======================
 // PROFILE

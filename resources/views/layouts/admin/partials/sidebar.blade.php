@@ -9,10 +9,13 @@
      data-kt-drawer-toggle="#kt_aside_mobile_toggle">
 
     <!--begin::Brand-->
-    <div class="aside-logo d-flex flex-column align-items-center py-4" style="background:#fff; border-radius:8px;">
-        <a href="{{ route('admin.dashboard') }}">
-            <img alt="Logo" src="{{ asset('assets/media/logos/no-background.png') }}" class="h-35px logo" />
-        </a>
+    <div class="aside-logo d-flex flex-column align-items-center py-4"> 
+        <a href="{{ route('admin.dashboard') }}"> 
+            <div class="logo-box">
+                <img alt="Logo" src="{{ asset('assets/media/logos/no-background.png') }}" 
+                    width="100" height="100" /> 
+            </div>
+        </a> 
     </div>
     <!--end::Brand-->
 
