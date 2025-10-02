@@ -11,7 +11,7 @@
     <!--begin::Brand-->
     <div class="aside-logo d-flex flex-column align-items-center py-4">
         <a href="{{ route('admin.dashboard') }}">
-            <img alt="Logo" src="{{ asset('assets/media/logos/logo-1.svg') }}" class="h-35px logo" />
+            <img alt="Logo" src="{{ asset('assets/media/logos/no-background.png') }}" class="h-35px logo" />
         </a>
     </div>
     <!--end::Brand-->
