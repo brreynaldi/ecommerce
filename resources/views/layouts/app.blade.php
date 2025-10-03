@@ -105,6 +105,28 @@
       .navbar.sticky-top { display: none; } /* hide navbar atas di mobile */
       main { padding-bottom: 65px; } /* biar tidak ketutupan bottom nav */
     }
+
+    .whatsapp-popup {
+  display: none;
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  width: 280px;
+  background: #25D366;
+  color: white;
+  border-radius: 12px;
+  overflow: hidden;
+  z-index: 1050;
+}
+.whatsapp-popup .popup-header {
+  background: #128C7E;
+  padding: 10px;
+}
+.whatsapp-popup .popup-body {
+  padding: 15px;
+  background: #25D366;
+}
+
   </style>
 </head>
 <body>
@@ -129,6 +151,12 @@
             <li class="nav-item"><a class="nav-link" href="{{ route('home') }}">Beranda</a></li>
             <li class="nav-item"><a class="nav-link" href="{{ route('products.index') }}">Produk</a></li>
             <li class="nav-item"><a class="nav-link" href="{{ route('profile.show') }}">Profil</a></li>
+            <li class="nav-item">
+              <a class="nav-link text-nowrap" href="{{ route('contact.create') }}">
+                 Contact Us
+              </a>
+            </li>
+
 
             <!-- Wishlist -->
             <li class="nav-item position-relative">
@@ -228,33 +256,89 @@
 
   {{-- Bottom nav tampil kalau bukan login/register --}}
   @if (!request()->routeIs('login') && !request()->routeIs('register'))
-    <div class="bottom-nav d-flex d-md-none">
-      <a href="{{ route('home') }}" class="{{ request()->is('/') ? 'active' : '' }}">
-        <i class="bi bi-house-door-fill"></i><span>Home</span>
-      </a>
-      <a href="{{ route('cart.index') }}" class="{{ request()->is('cart*') ? 'active' : '' }}">
-        <i class="bi bi-cart-fill"></i><span>Cart</span>
-      </a>
-      <a href="{{ route('wishlist.index') }}" class="{{ request()->is('wishlist*') ? 'active' : '' }}">
-        <i class="bi bi-heart-fill"></i><span>Wishlist</span>
-      </a>
-      <a href="{{ route('notifications.index') }}" class="{{ request()->is('notifications*') ? 'active' : '' }}">
-        <i class="bi bi-bell-fill"></i><span>Notif</span>
-      </a>
-      <a href="{{ route('profile.show') }}" class="{{ request()->is('profile*') ? 'active' : '' }}">
-        <i class="bi bi-person-circle"></i><span>Saya</span>
-      </a>
-    </div>
+   <div class="bottom-nav d-flex d-md-none">
+  <a href="{{ route('home') }}" class="{{ request()->is('/') ? 'active' : '' }}">
+    <i class="bi bi-house-door-fill"></i><span>Home</span>
+  </a>
+  <a href="{{ route('cart.index') }}" class="{{ request()->is('cart*') ? 'active' : '' }}">
+    <i class="bi bi-cart-fill"></i><span>Cart</span>
+  </a>
+  <a href="{{ route('wishlist.index') }}" class="{{ request()->is('wishlist*') ? 'active' : '' }}">
+    <i class="bi bi-heart-fill"></i><span>Wishlist</span>
+  </a>
+  <a href="{{ route('notifications.index') }}" class="{{ request()->is('notifications*') ? 'active' : '' }}">
+    <i class="bi bi-bell-fill"></i><span>Notif</span>
+  </a>
+  <a href="{{ route('contact.create') }}" class="{{ request()->is('contact') ? 'active' : '' }}">
+    <i class="bi bi-envelope-fill"></i><span>Contact</span>
+  </a>
+  <a href="{{ route('profile.show') }}" class="{{ request()->is('profile*') ? 'active' : '' }}">
+    <i class="bi bi-person-circle"></i><span>Saya</span>
+  </a>
+</div>
   @endif
 
-  {{-- Footer tampil kalau bukan login/register --}}
-  @if (!request()->routeIs('login') && !request()->routeIs('register'))
-    <footer class="footer-elegant text-light text-center">
-      <div class="container">
-        <p>&copy; 2025 <span class="fw-bold text-gold">Linea Bridal</span>. All rights reserved.</p>
+{{-- Footer tampil kalau bukan login/register --}}
+@if (!request()->routeIs('login') && !request()->routeIs('register'))
+  <footer class="footer-elegant text-light text-center">
+    <div class="container">
+
+      <!-- Contact Us Card -->
+      <div class="card bg-dark text-light shadow-sm border-0 mb-3">
+        <div class="card-body">
+          <h5 class="fw-bold text-gold mb-3">Hubungi Kami</h5>
+          
+          <div class="row justify-content-center">
+            <!-- Alamat -->
+            <div class="col-md-4 mb-3">
+              <i class="bi bi-geo-alt-fill text-warning fs-5 d-block mb-1"></i>
+              <small>Jl. Taman Pluit Kencana No.22</small>
+            </div>
+            <!-- Telepon -->
+    <!-- Tombol WhatsApp -->
+<div class="col-md-4 mb-3">
+  <a href="javascript:void(0)" onclick="openWhatsAppPopup()" class="text-decoration-none text-light">
+    <i class="bi bi-whatsapp text-success fs-5 d-block mb-1"></i>
+  </a>
+  <small>0851-9402-2541</small>
+</div>
+
+<!-- Popup WhatsApp -->
+<div id="whatsappPopup" class="whatsapp-popup shadow">
+  <div class="popup-header d-flex justify-content-between align-items-center">
+    <span class="fw-bold">Chat via WhatsApp</span>
+    <button type="button" class="btn-close btn-close-white" onclick="closeWhatsAppPopup()"></button>
+  </div>
+  <div class="popup-body">
+    <p class="mb-2">Halo 👋<br>Kami siap membantu Anda!</p>
+    <a href="https://wa.me/62895347118033?text=Halo%20Linea%20Bridal,%20saya%20ingin%20bertanya..."
+       target="_blank" class="btn btn-success w-100">
+      <i class="bi bi-whatsapp"></i> Mulai Chat
+    </a>
+  </div>
+</div>
+            <!-- Email -->
+            <!-- <div class="col-md-4 mb-3">
+              <i class="bi bi-envelope-fill text-warning fs-5 d-block mb-1"></i>
+              <small>info@lineabridal.com</small>
+            </div> -->
+          </div>
+        </div>
       </div>
-    </footer>
-  @endif
+
+      <!-- Copyright -->
+      <p class="mb-0">&copy; 2025 <span class="fw-bold text-gold">Linea Bridal</span>. All rights reserved.</p>
+    </div>
+  </footer>
+@endif
+<script>
+function openWhatsAppPopup() {
+  document.getElementById("whatsappPopup").style.display = "block";
+}
+function closeWhatsAppPopup() {
+  document.getElementById("whatsappPopup").style.display = "none";
+}
+</script>
 
   <!-- Script -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

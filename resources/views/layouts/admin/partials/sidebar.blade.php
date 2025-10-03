@@ -100,22 +100,30 @@
                         <span class="menu-title">Users</span>
                     </a>
                 </div>
-
+<!-- 
                 <div class="menu-item">
                     <a class="menu-link {{ request()->is('admin/reports*') ? 'active' : '' }}" 
                        href="{{ route('reports.index') }}">
                         <span class="menu-icon"><i class="ki-outline ki-chart fs-2"></i></span>
                         <span class="menu-title">Reports</span>
                     </a>
+                </div> -->
+                <!-- Contact Us -->
+                <div class="menu-item">
+                    <a class="menu-link {{ request()->is('admin/contacts*') ? 'active' : '' }}" 
+                    href="{{ route('admin.contacts.index') }}">
+                        <span class="menu-icon"><i class="ki-outline ki-message-text-2 fs-2"></i></span>
+                        <span class="menu-title">Contact Us</span>
+                    </a>
                 </div>
-
+<!-- 
                 <div class="menu-item">
                     <a class="menu-link {{ request()->is('admin/settings*') ? 'active' : '' }}" 
                        href="{{ route('settings.index') }}">
                         <span class="menu-icon"><i class="ki-outline ki-setting-3 fs-2"></i></span>
                         <span class="menu-title">Settings</span>
                     </a>
-                </div>
+                </div> -->
 
             </div>
             <!--end::Menu-->

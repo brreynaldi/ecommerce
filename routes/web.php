@@ -91,6 +91,16 @@ Route::resource('products', ProductController::class)->except(['show','index']);
         Route::get('/notifications/read-and-go/{id}', [App\Http\Controllers\Admin\NotificationController::class, 'readAndGo'])
         ->name('admin.notifications.readAndGo');
 });
+// Contact Us form (public)
+Route::get('/contact', [\App\Http\Controllers\ContactController::class, 'create'])->name('contact.create');
+Route::post('/contact', [\App\Http\Controllers\ContactController::class, 'store'])->name('contact.store');
+
+// Admin Contact Us
+Route::prefix('admin')->middleware(['auth','role:admin'])->group(function () {
+    Route::get('/contacts', [\App\Http\Controllers\Admin\ContactController::class, 'index'])->name('admin.contacts.index');
+    Route::get('/contacts/{contact}', [\App\Http\Controllers\Admin\ContactController::class, 'show'])->name('admin.contacts.show');
+    Route::delete('/contacts/{contact}', [\App\Http\Controllers\Admin\ContactController::class, 'destroy'])->name('admin.contacts.destroy');
+});
 
 
 // =======================
