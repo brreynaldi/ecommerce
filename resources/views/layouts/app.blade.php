@@ -126,6 +126,74 @@
   padding: 15px;
   background: #25D366;
 }
+#wa-widget {
+  position: fixed;
+  bottom: 70px;
+  right: 20px;
+  z-index: 1050;
+}
+
+.wa-popup {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.wa-bubble {
+  background: #fff;
+  border-radius: 20px;
+  padding: 6px 12px;
+  font-weight: bold;
+  color: #128C7E;
+  display: flex;
+  align-items: center;
+  animation: bounceIn 0.8s ease;
+}
+
+.wa-bubble .wave {
+  margin-right: 5px;
+}
+
+.wa-button {
+  width: 55px;
+  height: 55px;
+  background: #25D366;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  text-decoration: none;
+  transition: transform 0.3s ease;
+}
+
+.wa-button:hover {
+  transform: scale(1.1);
+  background: #20ba5a;
+}
+
+.wa-close {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: #000;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+/* Animasi bubble */
+@keyframes bounceIn {
+  from { transform: scale(0.5); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
 
   </style>
 </head>
@@ -248,7 +316,20 @@
       </div>
     </nav>
   @endif
-
+<!-- Floating WhatsApp -->
+<div id="wa-widget">
+  <div class="wa-popup shadow-lg">
+    <button type="button" class="wa-close" onclick="document.getElementById('wa-widget').style.display='none'">&times;</button>
+    <div class="wa-bubble">
+      <span class="wave">👋</span>
+      <span class="text">We Are Here!</span>
+    </div>
+    <a href="https://wa.me/62895347118033?text=Halo%20Linea%20Bridal,%20saya%20ingin%20bertanya..." 
+       target="_blank" class="wa-button">
+      <i class="bi bi-whatsapp"></i>
+    </a>
+  </div>
+</div>
   <!-- Main Content -->
   <main class="py-5">
     @yield('content')
@@ -256,6 +337,7 @@
 
   {{-- Bottom nav tampil kalau bukan login/register --}}
   @if (!request()->routeIs('login') && !request()->routeIs('register'))
+  
    <div class="bottom-nav d-flex d-md-none">
   <a href="{{ route('home') }}" class="{{ request()->is('/') ? 'active' : '' }}">
     <i class="bi bi-house-door-fill"></i><span>Home</span>
@@ -326,6 +408,8 @@
         </div>
       </div>
 
+
+
       <!-- Copyright -->
       <p class="mb-0">&copy; 2025 <span class="fw-bold text-gold">Linea Bridal</span>. All rights reserved.</p>
     </div>
@@ -338,6 +422,14 @@ function openWhatsAppPopup() {
 function closeWhatsAppPopup() {
   document.getElementById("whatsappPopup").style.display = "none";
 }
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  setTimeout(function() {
+    var myModal = new bootstrap.Modal(document.getElementById('whatsappAdModal'));
+    myModal.show();
+  }, 3000); // popup muncul 3 detik setelah halaman load
+});
 </script>
 
   <!-- Script -->
