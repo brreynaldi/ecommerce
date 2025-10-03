@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Contact;
+use App\Models\User;
+use App\Notifications\NewContactNotification;
 
 class ContactController extends Controller
 {
@@ -12,7 +14,7 @@ class ContactController extends Controller
         return view('contact.create');
     }
 
-    public function store(Request $request)
+   public function store(Request $request)
     {
         $request->validate([
             'name'    => 'required|string|max:255',
@@ -21,7 +23,13 @@ class ContactController extends Controller
             'message' => 'required|string',
         ]);
 
-        Contact::create($request->all());
+        $contact = Contact::create($request->all());
+
+        // Kirim notifikasi ke admin
+        $admins = User::where('role', 'admin')->get();
+        foreach ($admins as $admin) {
+            $admin->notify(new NewContactNotification($contact));
+        }
 
         return redirect()->back()->with('success', 'Pesan Anda berhasil dikirim!');
     }

@@ -366,7 +366,7 @@
     <div class="container">
 
       <!-- Contact Us Card -->
-      <div class="card bg-dark text-light shadow-sm border-0 mb-3">
+      <div class="shadow-sm border-0 mb-3">
         <div class="card-body">
           <h5 class="fw-bold text-gold mb-3">Hubungi Kami</h5>
           
